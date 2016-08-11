@@ -43,8 +43,8 @@ if [ ! -d ${RABBITIM_BUILD_SOURCE_CODE} ]; then
 	CURL_FILE=curl-7_49_1
     if [ "TRUE" = "${RABBITIM_USE_REPOSITORIES}" ]; then
         echo "git clone -q  git://github.com/bagder/curl.git ${RABBITIM_BUILD_SOURCE_CODE}"
-        #git clone -q  --branch=$CURL_FILE git://github.com/bagder/curl.git ${RABBITIM_BUILD_SOURCE_CODE}
-        git clone  -q --branch=$CURL_FILE git://github.com/bagder/curl.git ${RABBITIM_BUILD_SOURCE_CODE}
+        #git clone -q --branch=$CURL_FILE git://github.com/bagder/curl.git ${RABBITIM_BUILD_SOURCE_CODE}
+        git clone -q --branch=$CURL_FILE git://github.com/bagder/curl.git ${RABBITIM_BUILD_SOURCE_CODE}
     else
         echo "wget  -q https://github.com/bagder/curl/archive/${CURL_FILE}.zip"
         mkdir -p ${RABBITIM_BUILD_SOURCE_CODE}
@@ -65,6 +65,7 @@ if [ "$RABBITIM_CLEAN" ]; then
     if [ -d ".git" ]; then
         echo "git clean -xdf"
         git clean -xdf
+        git reset --hard HEAD
     fi
 fi
 
@@ -146,13 +147,10 @@ case ${RABBITIM_BUILD_TARGERT} in
         exit 0
         ;;
     windows_mingw)
-        CONFIG_PARA="${CONFIG_PARA} --enable-sse "
         case `uname -s` in
             Linux*|Unix*|CYGWIN*)
+                CONFIG_PARA="${CONFIG_PARA} --enable-sse "
                 CONFIG_PARA="${CONFIG_PARA} CC=${RABBITIM_BUILD_CROSS_PREFIX}gcc --host=${RABBITIM_BUILD_CROSS_HOST}"
-                ;;
-            MINGW* | MSYS*)
-                CONFIG_PARA="${CONFIG_PARA} --host=$RABBITIM_BUILD_CROSS_HOST"
                 ;;
             *)
             ;;
@@ -178,6 +176,7 @@ else
     ./configure ${CONFIG_PARA} LDFLAGS="${LDFLAGS}"
 fi
 
-${MAKE} V=1 && ${MAKE} install
+${MAKE} V=1 
+${MAKE} install
 
 cd $CUR_DIR

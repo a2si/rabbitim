@@ -126,6 +126,7 @@ else
 fi
 
 echo "make install"
-make ${RABBITIM_MAKE_JOB_PARA} && make install
+make ${RABBITIM_MAKE_JOB_PARA} 
+make install
 
 cd $CUR_DIR

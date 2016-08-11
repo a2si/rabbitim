@@ -127,13 +127,19 @@ case ${RABBITIM_BUILD_TARGERT} in
             MINGW*|MSYS*)
                 perl Configure --prefix=${RABBITIM_BUILD_PREFIX} \
                     --openssldir=${RABBITIM_BUILD_PREFIX} \
-                    $MODE mingw
+                    $MODE \
+                    zlib --with-zlib-lib=${RABBITIM_BUILD_PREFIX}/lib \
+                    --with-zlib-include=${RABBITIM_BUILD_PREFIX}/include \
+                    mingw 
                 ;;
             Linux*|Unix*|CYGWIN*|*)
                 perl Configure --prefix=${RABBITIM_BUILD_PREFIX} \
                     --openssldir=${RABBITIM_BUILD_PREFIX} \
                     --cross-compile-prefix=${RABBITIM_BUILD_CROSS_PREFIX} \
-                    $MODE mingw
+                    $MODE \
+                    zlib --with-zlib-lib=${RABBITIM_BUILD_PREFIX}/lib \
+                    --with-zlib-include=${RABBITIM_BUILD_PREFIX}/include \
+                    mingw
                 ;;
         esac
         ;;

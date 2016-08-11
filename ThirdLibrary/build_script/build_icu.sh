@@ -92,7 +92,8 @@ case ${RABBITIM_BUILD_TARGERT} in
     unix)
         cd ${CONFIG_DIR}
         ${SOURCE_DIR}/runConfigureICU Linux/gcc --prefix=${RABBITIM_BUILD_PREFIX} ${CONFIG_PARA}
-        ${MAKE} && ${MAKE} install
+        ${MAKE}
+        ${MAKE} install
         ;;
     windows_msvc)
         cd ${CONFIG_DIR}
@@ -105,8 +106,8 @@ case ${RABBITIM_BUILD_TARGERT} in
             ;;
         esac
         ${SOURCE_DIR}/runConfigureICU ${platform} --prefix=${RABBITIM_BUILD_PREFIX} ${CONFIG_PARA}
-        ${MAKE} \
-            && ${MAKE} install 
+        ${MAKE}
+        ${MAKE} install 
         if [ "$RABBITIM_BUILD_STATIC" != "static" ]; then
             mv ${RABBITIM_BUILD_PREFIX}/lib/icu*.dll ${RABBITIM_BUILD_PREFIX}/bin/.
         fi
@@ -119,8 +120,8 @@ case ${RABBITIM_BUILD_TARGERT} in
                 make ${RABBITIM_MAKE_JOB_PARA}
                 cd ${BUILD_DIR}
                 ${SOURCE_DIR}/configure --host=${RABBITIM_BUILD_CROSS_HOST} --with-cross_build=${CONFIG_DIR} --prefix=${RABBITIM_BUILD_PREFIX} ${CONFIG_PARA}
-                ${MAKE} ${RABBITIM_MAKE_JOB_PARA} \
-                    && ${MAKE} install 
+                ${MAKE} ${RABBITIM_MAKE_JOB_PARA} 
+                ${MAKE} install 
                 if [ "$RABBITIM_BUILD_STATIC" != "static" ]; then
                     mv ${RABBITIM_BUILD_PREFIX}/lib/icu*.dll ${RABBITIM_BUILD_PREFIX}/bin/.
                 fi
@@ -128,8 +129,8 @@ case ${RABBITIM_BUILD_TARGERT} in
             MINGW*|MSYS*)
                 cd ${CONFIG_DIR}
                 ${SOURCE_DIR}/runConfigureICU MinGW --prefix=${RABBITIM_BUILD_PREFIX} ${CONFIG_PARA} LDFLAGS=${LDFLAGS}
-                ${MAKE} \
-                    && ${MAKE} install 
+                ${MAKE} 
+                ${MAKE} install 
                 if [ "$RABBITIM_BUILD_STATIC" != "static" ]; then
                     mv ${RABBITIM_BUILD_PREFIX}/lib/icu*.dll ${RABBITIM_BUILD_PREFIX}/bin/.
                 fi

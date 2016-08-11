@@ -21,9 +21,9 @@ function function_common()
     #下载最新cmake程序
     if [ "cmake" = "${QMAKE}" ]; then
         if [ ! -d "`pwd`/cmake" ]; then
-            wget -nv --no-check-certificate http://www.cmake.org/files/v3.1/cmake-3.1.0-Linux-x86_64.tar.gz
-            tar xzf cmake-3.1.0-Linux-x86_64.tar.gz
-            mv cmake-3.1.0-Linux-x86_64 cmake
+            wget -nv --no-check-certificate http://www.cmake.org/files/v3.6/cmake-3.6.1-Linux-x86_64.tar.gz
+            tar xzf cmake-3.6.1-Linux-x86_64.tar.gz
+            mv cmake-3.6.1-Linux-x86_64 cmake
         fi
     fi
     

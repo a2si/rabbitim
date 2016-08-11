@@ -33,24 +33,29 @@ fi
 if [ -n "$2" ]; then
     RABBITIM_BUILD_SOURCE_CODE=$2
 else
-    RABBITIM_BUILD_SOURCE_CODE=${RABBITIM_BUILD_PREFIX}/../src/tiff
+    RABBITIM_BUILD_SOURCE_CODE=${RABBITIM_BUILD_PREFIX}/../src/minizip
 fi
 
 CUR_DIR=`pwd`
 
 #下载源码:
 if [ ! -d ${RABBITIM_BUILD_SOURCE_CODE} ]; then
-    TIFF_VERSION=4.0.6
-    echo "wget -q ftp://ftp.remotesensing.org/pub/libtiff/tiff-${TIFF_VERSION}.zip"
-    mkdir -p ${RABBITIM_BUILD_SOURCE_CODE}
-    cd ${RABBITIM_BUILD_SOURCE_CODE}
-    wget -q ftp://ftp.remotesensing.org/pub/libtiff/tiff-${TIFF_VERSION}.zip
-    unzip -q tiff-${TIFF_VERSION}.zip
-    mv tiff-${TIFF_VERSION} ..
-    rm -fr *
-    cd ..
-    rm -fr ${RABBITIM_BUILD_SOURCE_CODE}
-    mv -f tiff-${TIFF_VERSION} ${RABBITIM_BUILD_SOURCE_CODE}
+    VERSION=master
+    if [ "TRUE" = "${RABBITIM_USE_REPOSITORIES}" ]; then
+        echo "git clone -q https://github.com/nmoinvaz/minizip.git ${RABBITIM_BUILD_SOURCE_CODE}"
+        git clone -q https://github.com/nmoinvaz/minizip.git ${RABBITIM_BUILD_SOURCE_CODE}
+    else
+        mkdir -p ${RABBITIM_BUILD_SOURCE_CODE}
+        cd ${RABBITIM_BUILD_SOURCE_CODE}
+        echo "wget -nv -c https://github.com/nmoinvaz/minizip/archive/master.zip"
+        wget -nv -c -O minizip.zip https://github.com/nmoinvaz/minizip/archive/master.zip
+        unzip -q minizip.zip
+        mv minizip-${VERSION} ..
+        rm -fr minizip.zip ${RABBITIM_BUILD_SOURCE_CODE}
+        cd ..
+        mv minizip-${VERSION} ${RABBITIM_BUILD_SOURCE_CODE}
+        
+    fi
 fi
 
 cd ${RABBITIM_BUILD_SOURCE_CODE}
@@ -75,9 +80,9 @@ echo ""
 echo "configure ..."
 MAKE_PARA="-- ${RABBITIM_MAKE_JOB_PARA}"
 if [ "$RABBITIM_BUILD_STATIC" = "static" ]; then
-    CMAKE_PARA="-DBUILD_SHARED_LIBS=OFF"
+    CONFIG_PARA="--enable-static --disable-shared"
 else
-    CMAKE_PARA="-DBUILD_SHARED_LIBS=ON"
+    CONFIG_PARA="--disable-static --enable-shared"
 fi
 case ${RABBITIM_BUILD_TARGERT} in
     android)
@@ -112,9 +117,8 @@ echo "cmake .. -DCMAKE_INSTALL_PREFIX=$RABBITIM_BUILD_PREFIX -DCMAKE_BUILD_TYPE=
 cmake .. \
     -DCMAKE_INSTALL_PREFIX="$RABBITIM_BUILD_PREFIX" \
     -DCMAKE_BUILD_TYPE="Release" \
-    -G"${GENERATORS}" ${CMAKE_PARA} -Dlzma=OFF
+    -G"${GENERATORS}" ${CMAKE_PARA} -DZLIB_ROOT="$RABBITIM_BUILD_PREFIX"
 
 cmake --build . --target install --config Release ${MAKE_PARA}
-mkdir -p $RABBITIM_BUILD_PREFIX/lib/pkgconfig
-cp $RABBITIM_BUILD_PREFIX/share/pkgconfig/* $RABBITIM_BUILD_PREFIX/lib/pkgconfig/.
+
 cd $CUR_DIR

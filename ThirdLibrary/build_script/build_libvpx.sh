@@ -124,7 +124,8 @@ echo "../configure ${CONFIG_PARA} --extra-cflags=\"${CFLAGS=}\""
 ../configure ${CONFIG_PARA} --extra-cflags="${CFLAGS}"
 
 echo "make install"
-make ${RABBITIM_MAKE_JOB_PARA} && make install
+make ${RABBITIM_MAKE_JOB_PARA} 
+make install
 
 if [ "${RABBITIM_BUILD_TARGERT}" = "windows_msvc" ]; then
     cp ${RABBITIM_BUILD_PREFIX}/lib/Win32/vpxmt.lib ${RABBITIM_BUILD_PREFIX}/lib/vpx.lib

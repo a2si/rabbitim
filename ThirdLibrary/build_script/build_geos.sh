@@ -33,24 +33,28 @@ fi
 if [ -n "$2" ]; then
     RABBITIM_BUILD_SOURCE_CODE=$2
 else
-    RABBITIM_BUILD_SOURCE_CODE=${RABBITIM_BUILD_PREFIX}/../src/tiff
+    RABBITIM_BUILD_SOURCE_CODE=${RABBITIM_BUILD_PREFIX}/../src/geos
 fi
 
 CUR_DIR=`pwd`
 
 #下载源码:
 if [ ! -d ${RABBITIM_BUILD_SOURCE_CODE} ]; then
-    TIFF_VERSION=4.0.6
-    echo "wget -q ftp://ftp.remotesensing.org/pub/libtiff/tiff-${TIFF_VERSION}.zip"
-    mkdir -p ${RABBITIM_BUILD_SOURCE_CODE}
-    cd ${RABBITIM_BUILD_SOURCE_CODE}
-    wget -q ftp://ftp.remotesensing.org/pub/libtiff/tiff-${TIFF_VERSION}.zip
-    unzip -q tiff-${TIFF_VERSION}.zip
-    mv tiff-${TIFF_VERSION} ..
-    rm -fr *
-    cd ..
-    rm -fr ${RABBITIM_BUILD_SOURCE_CODE}
-    mv -f tiff-${TIFF_VERSION} ${RABBITIM_BUILD_SOURCE_CODE}
+    VERSION=3.5.0
+    if [ "TRUE" = "${RABBITIM_USE_REPOSITORIES}" ]; then
+        echo "svn checkout http://svn.osgeo.org/geos/trunk ${RABBITIM_BUILD_SOURCE_CODE}"
+        svn checkout http://svn.osgeo.org/geos/trunk ${RABBITIM_BUILD_SOURCE_CODE}
+    else
+        echo "wget -c -nv http://download.osgeo.org/geos/geos-$VERSION.tar.bz2"
+        mkdir -p ${RABBITIM_BUILD_SOURCE_CODE}
+        cd ${RABBITIM_BUILD_SOURCE_CODE}
+        wget http://download.osgeo.org/geos/geos-$VERSION.tar.bz2
+        tar xf geos-$VERSION.tar.bz2
+        mv geos-$VERSION ..
+        cd ..
+        rm -fr ${RABBITIM_BUILD_SOURCE_CODE}
+        mv geos-$VERSION ${RABBITIM_BUILD_SOURCE_CODE}
+    fi
 fi
 
 cd ${RABBITIM_BUILD_SOURCE_CODE}
@@ -112,9 +116,8 @@ echo "cmake .. -DCMAKE_INSTALL_PREFIX=$RABBITIM_BUILD_PREFIX -DCMAKE_BUILD_TYPE=
 cmake .. \
     -DCMAKE_INSTALL_PREFIX="$RABBITIM_BUILD_PREFIX" \
     -DCMAKE_BUILD_TYPE="Release" \
-    -G"${GENERATORS}" ${CMAKE_PARA} -Dlzma=OFF
+    -G"${GENERATORS}" ${CMAKE_PARA} 
 
 cmake --build . --target install --config Release ${MAKE_PARA}
-mkdir -p $RABBITIM_BUILD_PREFIX/lib/pkgconfig
-cp $RABBITIM_BUILD_PREFIX/share/pkgconfig/* $RABBITIM_BUILD_PREFIX/lib/pkgconfig/.
+
 cd $CUR_DIR

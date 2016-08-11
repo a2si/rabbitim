@@ -153,7 +153,8 @@ else
     ../configure ${CONFIG_PARA}
 fi
 
-${MAKE} && ${MAKE} install
+${MAKE} 
+${MAKE} install
 
 if [ "${RABBITIM_BUILD_TARGERT}" = "windows_msvc" ]; then
     cd ${RABBITIM_BUILD_PREFIX}/lib

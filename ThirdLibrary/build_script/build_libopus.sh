@@ -143,6 +143,7 @@ echo "../configure ${CONFIG_PARA} CFLAGS=\"${CFLAGS=}\" CPPFLAGS=\"${CPPFLAGS}\"
 ../configure ${CONFIG_PARA} CFLAGS="${CFLAGS}" CPPFLAGS="${CPPFLAGS}" LDFLAGS="${LDFLAGS}"
 
 echo "make install"
-make ${RABBITIM_MAKE_JOB_PARA} VERBOSE=1 && make install
+make ${RABBITIM_MAKE_JOB_PARA} VERBOSE=1 
+make install
 
 cd $CUR_DIR

@@ -2,7 +2,7 @@
 set -ev
 
 if [  "$BUILD_TARGET" = "windows_mingw" ]; then
-    export PATH=/C/Qt/Tools/mingw${toolchain_version}_32/bin:/usr/bin
+    export PATH=/C/Qt/Tools/mingw${toolchain_version}_32/bin:$PATH
 fi
 
 SOURCE_DIR=`pwd`
@@ -22,6 +22,16 @@ if [ -n "$DOWNLOAD_FILE" ]; then
    unzip -q ${SCRIPT_DIR}/../${BUILD_TARGET}.zip -d ${SCRIPT_DIR}/../${BUILD_TARGET}
 fi
 
+if [ "$BUILD_TARGET" = "android" ]; then
+    export ANDROID_SDK_ROOT=${SCRIPT_DIR}/../Tools/android-sdk
+    export ANDROID_NDK_ROOT=${SCRIPT_DIR}/../Tools/android-ndk
+    export JAVA_HOME="/C/Program Files (x86)/Java/jdk1.8.0"
+    export QT_ROOT=${SCRIPT_DIR}/../Tools/Qt/${QT_VERSION}/${QT_VERSION_DIR}/android_armv7
+    if [ "${QT_VERSION}" = "5.2.1" ]; then
+        export QT_ROOT=${SCRIPT_DIR}/../Tools/Qt/${QT_VERSION}/android_armv7
+    fi
+    export PATH=${SCRIPT_DIR}/../Tools/apache-ant/bin:$JAVA_HOME:$PATH
+fi
 if [ "$BUILD_TARGET" = "windows_mingw" ]; then
     RABBITIM_MAKE_JOB_PARA="-j`cat /proc/cpuinfo |grep 'cpu cores' |wc -l`"  #make 同时工作进程参数
     if [ "$RABBITIM_MAKE_JOB_PARA" = "-j1" ];then

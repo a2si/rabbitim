@@ -57,17 +57,6 @@ before_script:
   
 script: 
   - bash ${SOURCE_DIR}/ThirdLibrary/build_script/ci/build_linux.sh ${SOURCE_DIR}
-  #- bash ./build_webrtc.sh ${BUILD_TARGERT}
-  #- if [ "$RABBITIM_BUILD_THIRDLIBRARY" = "TRUE" ]; then bash ./build_openssl.sh ${BUILD_TARGERT} > /dev/null; fi
-  #- if [ "$RABBITIM_BUILD_THIRDLIBRARY" = "TRUE" ]; then bash ./build_libcurl.sh ${BUILD_TARGERT} > /dev/null; fi
-  #- if [ "$RABBITIM_BUILD_THIRDLIBRARY" = "TRUE" ]; then bash ./build_qrencode.sh ${BUILD_TARGERT} > /dev/null; fi
-  #- if [ "$RABBITIM_BUILD_THIRDLIBRARY" = "TRUE" ]; then bash ./build_x264.sh ${BUILD_TARGERT}  > /dev/null; fi
-  #- if [ "$RABBITIM_BUILD_THIRDLIBRARY" = "TRUE" ]; then bash ./build_libvpx.sh ${BUILD_TARGERT} > /dev/null; fi
-  #- if [ "$RABBITIM_BUILD_THIRDLIBRARY" = "TRUE" ]; then bash ./build_libyuv.sh ${BUILD_TARGERT} > /dev/null; fi
-  #- if [ "$RABBITIM_BUILD_THIRDLIBRARY" = "TRUE" ]; then bash ./build_ffmpeg.sh ${BUILD_TARGERT} > /dev/null; fi
-  #- bash ./build_qxmpp.sh ${BUILD_TARGERT}  > /dev/null
-  #- bash ./build_qzxing.sh ${BUILD_TARGERT} > /dev/null
-  #- bash ./build_rabbitim.sh ${BUILD_TARGERT} ${SOURCE_DIR} ${QMAKE} #> /dev/null
 
 notifications:
   email: kl222@126.com

@@ -66,9 +66,16 @@ if [ "$RABBITIM_CLEAN" ]; then
         echo "git clean -xdf"
         git clean -xdf
     else
-        make clean
+        if [ "${RABBITIM_BUILD_TARGERT}" != "windows_msvc" ]; then
+            ${MAKE} clean
+        fi
     fi
 fi
+#mkdir -p build_${RABBITIM_BUILD_TARGERT}
+#cd build_${RABBITIM_BUILD_TARGERT}
+#if [ -n "$RABBITIM_CLEAN" ]; then
+#    rm -fr *
+#fi
 
 echo ""
 echo "RABBITIM_BUILD_TARGERT:${RABBITIM_BUILD_TARGERT}"
@@ -114,8 +121,10 @@ case ${RABBITIM_BUILD_TARGERT} in
     unix)
         ;;
     windows_msvc)
-        nmake makefile.vc
-        nmake makefile.vc GDAL_HOME="$RABBITIM_BUILD_PREFIX" devinstall
+        echo "nmake -f makefile.vc"
+        ${MAKE} -f makefile.vc clean
+        nmake -f makefile.vc
+        nmake -f makefile.vc GDAL_HOME="$RABBITIM_BUILD_PREFIX" MSVC_VER=${MSVC_VER} devinstall
         cd $CUR_DIR
         exit 0
         ;;
@@ -149,6 +158,7 @@ echo "./configure ${CONFIG_PARA} CFLAGS=\"${CFLAGS=}\"
     CPPFLAGS="${CPPFLAGS}" CXXFLAGS="${CXXFLAGS}" \
     LDFLAGS="$LDFLAGS" LIBS="$LIBS"
 
-${MAKE} && ${MAKE} install
+${MAKE} ${RABBITIM_MAKE_JOB_PARA}
+${MAKE} install
 
 cd $CUR_DIR
